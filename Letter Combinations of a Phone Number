@@ -1,0 +1,44 @@
+class Solution {
+public:
+    unordered_map<char, vector<char>> digitToChar = {
+        {'1', {}}, {'2', {'a','b','c'}}, {'3', {'d','e','f'}},
+        {'4', {'g','h','i'}}, {'5', {'j','k','l'}}, {'6', {'m','n','o'}},
+        {'7', {'p','q','r','s'}}, {'8', {'t','u','v'}}, {'9', {'w','x','y','z'}},
+        {'*', {}}, {'0', {}}, {'#', {}}
+    };
+    
+    void helper_fcn(vector<string>& res, string nums) {
+        if (nums.size() == 0)   return;
+        else{
+            auto itr_first = nums.begin();
+            char first = *itr_first;
+            vector<char> letters = digitToChar[first];
+            vector<string> curr(res);
+            res.clear();
+            for(auto it = curr.begin(); it != curr.end(); ++it){
+                for (auto it_j = letters.begin(); it_j != letters.end(); ++it_j) {
+                    string temp(*it);
+                    temp.push_back(*it_j);
+                    res.push_back(temp);
+                }
+            }
+            return helper_fcn(res, nums.substr(1, nums.size()-1));
+        }
+    }
+    
+    vector<string> letterCombinations(string digits) {
+        vector<string> result;
+        int N = digits.size();
+        if (N == 0) return result;
+        else {
+            vector<char> vec = digitToChar[digits[0]];
+            for (int i = 0; i < vec.size(); ++i) {
+                string tmp;
+                tmp.push_back(vec[i]);
+                result.push_back(tmp);
+            }
+            helper_fcn(result, digits.substr(1, digits.size()-1));   
+        }
+        return result;
+    }
+};
